@@ -261,8 +261,8 @@ class FnBodyNode extends ASTnode {
         myStmtList.nameAnalysis(symTab);
     }    
     
-    public void typeCheck() {
-    	myStmtList.typeCheck();
+    public void typeCheck(Type t) {
+    	myStmtList.typeCheck(t);
     }
     public void unparse(PrintWriter p, int indent) {
         myDeclList.unparse(p, indent);
@@ -289,9 +289,12 @@ class StmtListNode extends ASTnode {
         }
     }    
     
-    public void typeCheck() {
+    public void typeCheck(Type t) {
     	for (StmtNode node : myStmts) {
             node.typeCheck();
+            if(node.getClass().equals("ReturnStmtNode")) {
+            	node.typeCheck(t);
+            }
         }
     }
     public void unparse(PrintWriter p, int indent) {
@@ -552,7 +555,7 @@ class FnDeclNode extends DeclNode {
     }    
     
     public void typeCheck() {
-    	myBody.typeCheck();
+    	myBody.typeCheck(myType.type());
     }
     
     public void unparse(PrintWriter p, int indent) {
@@ -790,6 +793,7 @@ class StructNode extends TypeNode {
 abstract class StmtNode extends ASTnode {
     abstract public void nameAnalysis(SymTable symTab);
     abstract public void typeCheck();
+    public void typeCheck(Type t) { }
 }
 
 class AssignStmtNode extends StmtNode {
@@ -1197,6 +1201,9 @@ class CallStmtNode extends StmtNode {
         myCall.nameAnalysis(symTab);
     }
 
+    public void typeCheck() {
+    	myCall.typeCheck();
+    }
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         myCall.unparse(p, indent);
@@ -1206,11 +1213,6 @@ class CallStmtNode extends StmtNode {
     // 1 kid
     private CallExpNode myCall;
 
-	@Override
-	public void typeCheck() {
-		// TODO Auto-generated method stub
-		
-	}
 }
 
 class ReturnStmtNode extends StmtNode {
@@ -1229,6 +1231,33 @@ class ReturnStmtNode extends StmtNode {
         }
     }
 
+    public void typeCheck(Type t) {
+    	
+    	Type expType = null;
+    	
+    	if(myExp != null) {
+    		expType = myExp.typeCheck();
+    	}
+    	
+    	// Check for plain return stmt from non-void func
+    	if(expType == null && !t.isVoidType()) {
+    		ErrMsg.fatal(0, 0, "Missing return value");
+    		return;
+    	}
+    	
+    	// Returning value from void function
+    	if(expType != null && t.isVoidType()) {
+    		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
+    				"Return with a value in a void function");
+    		return;
+    	}
+    	
+    	if(!expType.isErrorType() && !expType.toString().equals(t.toString()))  {
+    		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
+    				"Bad return value");
+    	}
+    }
+    
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         p.print("return");
@@ -1242,9 +1271,8 @@ class ReturnStmtNode extends StmtNode {
     // 1 kid
     private ExpNode myExp; // possibly null
 
-	@Override
+	// wont be called
 	public void typeCheck() {
-		// TODO Auto-generated method stub
 		
 	}
 }
