@@ -292,7 +292,7 @@ class StmtListNode extends ASTnode {
     public void typeCheck(Type t) {
     	for (StmtNode node : myStmts) {
             node.typeCheck();
-            if(node.getClass().equals("ReturnStmtNode")) {
+            if(node instanceof ReturnStmtNode) {
             	node.typeCheck(t);
             }
         }
@@ -361,6 +361,7 @@ class ExpListNode extends ASTnode {
     	Iterator<ExpNode> it = myExps.iterator();
         while(it.hasNext()) {
         	size++;
+        	it.next();
         }
         return size;
     }
@@ -924,11 +925,11 @@ class ReadStmtNode extends StmtNode {
     	}
     	
     	if(expType.isStructType()) {
-    		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read a struct name");
+    		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read a struct variable");
     	}
     	
     	if(expType.isStructDefType()) {
-    		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read a struct variable");
+    		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read a struct name");
     	}
     }
     
@@ -976,11 +977,11 @@ class WriteStmtNode extends StmtNode {
     	}
     	
     	if(expType.isStructType()) {
-    		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a struct name");
+    		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a struct variable");
     	}
     	
     	if(expType.isStructDefType()) {
-    		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a struct variable");
+    		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a struct name");
     	}
     	
     	if(expType.isVoidType()) {
@@ -1244,7 +1245,7 @@ class ReturnStmtNode extends StmtNode {
     		ErrMsg.fatal(0, 0, "Missing return value");
     		return;
     	}
-    	
+
     	// Returning value from void function
     	if(expType != null && t.isVoidType()) {
     		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
@@ -1653,9 +1654,10 @@ class AssignNode extends ExpNode {
     	if(myLhsType.isErrorType() || myExpType.isErrorType()) {
     		return new ErrorType();
     	}
+   
     	// type mismatch check
     	if(!myLhsType.toString().equals(myExpType.toString())) {
-    		if(myExpType.isErrorType()) {
+    		if(!myExpType.isErrorType()) {
     			ErrMsg.fatal(((IdNode)myLhs).lineNum(), ((IdNode)myLhs).charNum(), 
                         "Type mismatch");
     		}
@@ -1671,14 +1673,14 @@ class AssignNode extends ExpNode {
     	// Struct name check
     	if(myLhsType.isStructType() && myExpType.isStructType()) {
     		ErrMsg.fatal(((IdNode)myLhs).lineNum(), ((IdNode)myLhs).charNum(), 
-                    "Struct name assignment");
+                    "Struct variable assignment");
     		return new ErrorType();
     	}
     	
     	// Struct declared variable check
     	if(myLhsType.isStructDefType() && myExpType.isStructDefType()) {
     		ErrMsg.fatal(((IdNode)myLhs).lineNum(), ((IdNode)myLhs).charNum(), 
-                    "Struct variable assignment");
+                    "Struct name assignment");
     		return new ErrorType();
     	}
     	
@@ -1749,7 +1751,6 @@ class CallExpNode extends ExpNode {
     		return new ErrorType();
     	}
     	
-    
     	// Check for wrong number of args
     	if(myExpList.getSize() != ((FnSym)myId.sym()).getNumParams()) {
     		ErrMsg.fatal(myId.lineNum(), myId.charNum(), 
@@ -2161,13 +2162,13 @@ class EqualsNode extends BinaryExpNode {
     	
     	if(expType1.isStructType() && expType2.isStructType()) {
     		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-					"Equality operator applied to struct names");
+					"Equality operator applied to struct variables");
     		return new ErrorType();
     	}
     	
     	if(expType1.isStructDefType() && expType2.isStructDefType()) {
     		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-					"Equality operator applied to struct variables");
+					"Equality operator applied to struct names");
     		return new ErrorType();
     	}
     	
@@ -2219,13 +2220,13 @@ class NotEqualsNode extends BinaryExpNode {
     	
     	if(expType1.isStructType() && expType2.isStructType()) {
     		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-					"Equality operator applied to struct names");
+					"Equality operator applied to struct variables");
     		return new ErrorType();
     	}
     	
     	if(expType1.isStructDefType() && expType2.isStructDefType()) {
     		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-					"Equality operator applied to struct variables");
+					"Equality operator applied to struct names");
     		return new ErrorType();
     	}
     	
