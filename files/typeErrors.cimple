@@ -1,0 +1,545 @@
+void voidFuncVoid()
+{
+    cout << "voidFuncVoid";
+}
+
+
+bool boolFuncVoid()
+{
+    cout << "boolFuncVoid";
+    return false;
+}
+
+
+void voidFuncInt(int a)
+{
+    cout << "voidFuncInt";
+}
+
+
+bool boolFuncBoolInt(bool a, int b)
+{
+    cout << "boolFuncBoolInt";
+    return a;
+}
+
+
+struct TestStruct
+{
+    int a;
+    bool b;
+};
+
+struct TestStructTwo
+{
+    int a;
+};
+
+
+int main()
+{
+	
+    // EVERY ERROR IS TESTED HERE IN FUNCTION BODY NODE
+    int x;
+    bool y;
+    struct TestStruct ts;
+    struct TestStructTwo ts2;
+    
+    // writing a function
+    cout << voidFuncVoid;
+    
+    // writing a struct name
+    cout << TestStruct;
+    
+    // writing a struct variable
+    cout << ts;
+    
+    // writing a void value
+    cout << voidFuncVoid();
+    
+    // reading a function
+    cin >> boolFuncVoid;
+    
+    // reading a struct name
+    cin >> TestStruct;
+    
+    // reading a struct variable
+    cin >> ts;
+    
+    // calling something other than a function
+    x();
+    
+    // calling a function with the wrong number of args
+    voidFuncInt(x, x);
+    boolFuncBoolInt(x);
+    
+    // calling a function with an argument of the wrong type
+    voidFuncInt(false);
+    boolFuncBoolInt(x, true);
+    
+    // Applying an arithmetic operator to an operand with type other than int
+    x = x * false;
+    x = x / false;
+    x = x + false;
+    x = x - false;
+    y++;
+    y--;
+    
+    // Applying a relational operator to an operand with type other than int
+    y = x > false;
+    y = x < false;
+    y = x >= false;
+    y = x <= false;
+    
+    // Applying a logical operator to an operand with type other than bool
+    y = !12;
+    y = x && y;
+    y = x || y;
+    
+    // Using a non-bool expression as the condition of an if
+    if (x) {}
+    
+    // Using a non-bool expression as the condition of a while
+    while (x) {}
+    
+    // Applying an equality operator to operands of two different types
+    if (x == y) {}
+    if (x != y) {}
+    
+    // Assigning a value of one type to a variable of another type
+    x = y;
+    y = x;
+    
+    // Comparing two functions for equality
+    if (voidFuncVoid == boolFuncBoolInt) {}
+    if (voidFuncVoid != boolFuncBoolInt) {}
+    
+    // Comparing two struct names for equality
+    if (TestStruct == TestStructTwo) {}
+    if (TestStruct != TestStructTwo) {}
+    
+    // Comparing two struct variables for equality
+    if (ts == ts2) {}
+    if (ts != ts2) {}
+    
+    // Assigning a function to a function
+    voidFuncInt = boolFuncBoolInt;
+    
+    // Assigning a struct name to a struct name
+    TestStruct = TestStructTwo;
+    
+    // Assigning a struct variable to a struct variable
+    ts = ts2;
+
+    if(voidFuncInt(10) == voidFuncVoid()) {}
+    if(voidFuncInt(10) != voidFuncVoid()) {}
+    
+    //return true;
+
+    // TEST ERRORS IN IF STATEMENT STATEMENTLIST
+    if(true) {
+	    int x;
+        bool y;
+        struct TestStruct ts;
+        struct TestStructTwo ts2;
+        
+        // writing a function
+        cout << voidFuncVoid;
+        
+        // writing a struct name
+        cout << TestStruct;
+        
+        // writing a struct variable
+        cout << ts;
+        
+        // writing a void value
+        cout << voidFuncVoid();
+        
+        // reading a function
+        cin >> boolFuncVoid;
+        
+        // reading a struct name
+        cin >> TestStruct;
+        
+        // reading a struct variable
+        cin >> ts;
+        
+        // calling something other than a function
+        x();
+        
+        // calling a function with the wrong number of args
+        voidFuncInt(x, x);
+        boolFuncBoolInt(x);
+        
+        // calling a function with an argument of the wrong type
+        voidFuncInt(false);
+        boolFuncBoolInt(x, true);
+        
+        // Applying an arithmetic operator to an operand with type other than int
+        x = x * false;
+        x = x / false;
+        x = x + false;
+        x = x - false;
+        y++;
+        y--;
+        
+        // Applying a relational operator to an operand with type other than int
+        y = x > false;
+        y = x < false;
+        y = x >= false;
+        y = x <= false;
+        
+        // Applying a logical operator to an operand with type other than bool
+        y = !12;
+        y = x && y;
+        y = x || y;
+        
+        // Using a non-bool expression as the condition of an if
+        if (x) {}
+        
+        // Using a non-bool expression as the condition of a while
+        while (x) {}
+        
+        // Applying an equality operator to operands of two different types
+        if (x == y) {}
+        if (x != y) {}
+        
+        // Assigning a value of one type to a variable of another type
+        x = y;
+        y = x;
+        
+        // Comparing two functions for equality
+        if (voidFuncVoid == boolFuncBoolInt) {}
+        if (voidFuncVoid != boolFuncBoolInt) {}
+        
+        // Comparing two struct names for equality
+        if (TestStruct == TestStructTwo) {}
+        if (TestStruct != TestStructTwo) {}
+        
+        // Comparing two struct variables for equality
+        if (ts == ts2) {}
+        if (ts != ts2) {}
+        
+        // Assigning a function to a function
+        voidFuncInt = boolFuncBoolInt;
+        
+        // Assigning a struct name to a struct name
+        TestStruct = TestStructTwo;
+        
+        // Assigning a struct variable to a struct variable
+        ts = ts2;
+
+        if(voidFuncInt(10) == voidFuncVoid()) {}
+        if(voidFuncInt(10) != voidFuncVoid()) {}
+        
+        return true;
+    }
+    
+    // TEST ERRORS IN WHILE STATEMENT STATEMENTLIST
+    while(true) {
+	    int x;
+        bool y;
+        struct TestStruct ts;
+        struct TestStructTwo ts2;
+        
+        // writing a function
+        cout << voidFuncVoid;
+        
+        // writing a struct name
+        cout << TestStruct;
+        
+        // writing a struct variable
+        cout << ts;
+        
+        // writing a void value
+        cout << voidFuncVoid();
+        
+        // reading a function
+        cin >> boolFuncVoid;
+        
+        // reading a struct name
+        cin >> TestStruct;
+        
+        // reading a struct variable
+        cin >> ts;
+        
+        // calling something other than a function
+        x();
+        
+        // calling a function with the wrong number of args
+        voidFuncInt(x, x);
+        boolFuncBoolInt(x);
+        
+        // calling a function with an argument of the wrong type
+        voidFuncInt(false);
+        boolFuncBoolInt(x, true);
+        
+        // Applying an arithmetic operator to an operand with type other than int
+        x = x * false;
+        x = x / false;
+        x = x + false;
+        x = x - false;
+        y++;
+        y--;
+        
+        // Applying a relational operator to an operand with type other than int
+        y = x > false;
+        y = x < false;
+        y = x >= false;
+        y = x <= false;
+        
+        // Applying a logical operator to an operand with type other than bool
+        y = !12;
+        y = x && y;
+        y = x || y;
+        
+        // Using a non-bool expression as the condition of an if
+        if (x) {}
+        
+        // Using a non-bool expression as the condition of a while
+        while (x) {}
+        
+        // Applying an equality operator to operands of two different types
+        if (x == y) {}
+        if (x != y) {}
+        
+        // Assigning a value of one type to a variable of another type
+        x = y;
+        y = x;
+        
+        // Comparing two functions for equality
+        if (voidFuncVoid == boolFuncBoolInt) {}
+        if (voidFuncVoid != boolFuncBoolInt) {}
+        
+        // Comparing two struct names for equality
+        if (TestStruct == TestStructTwo) {}
+        if (TestStruct != TestStructTwo) {}
+        
+        // Comparing two struct variables for equality
+        if (ts == ts2) {}
+        if (ts != ts2) {}
+        
+        // Assigning a function to a function
+        voidFuncInt = boolFuncBoolInt;
+        
+        // Assigning a struct name to a struct name
+        TestStruct = TestStructTwo;
+        
+        // Assigning a struct variable to a struct variable
+        ts = ts2;
+
+        if(voidFuncInt(10) == voidFuncVoid()) {}
+        if(voidFuncInt(10) != voidFuncVoid()) {}
+        
+        return true;
+    }
+    
+    // TEST ERRORS IN IF ELSE STATEMENT STATEMENTLISTS
+    if(true) {
+        int x;
+        bool y;
+        struct TestStruct ts;
+        struct TestStructTwo ts2;
+        
+        // writing a function
+        cout << voidFuncVoid;
+        
+        // writing a struct name
+        cout << TestStruct;
+        
+        // writing a struct variable
+        cout << ts;
+        
+        // writing a void value
+        cout << voidFuncVoid();
+        
+        // reading a function
+        cin >> boolFuncVoid;
+        
+        // reading a struct name
+        cin >> TestStruct;
+        
+        // reading a struct variable
+        cin >> ts;
+        
+        // calling something other than a function
+        x();
+        
+        // calling a function with the wrong number of args
+        voidFuncInt(x, x);
+        boolFuncBoolInt(x);
+        
+        // calling a function with an argument of the wrong type
+        voidFuncInt(false);
+        boolFuncBoolInt(x, true);
+        
+        // Applying an arithmetic operator to an operand with type other than int
+        x = x * false;
+        x = x / false;
+        x = x + false;
+        x = x - false;
+        y++;
+        y--;
+        
+        // Applying a relational operator to an operand with type other than int
+        y = x > false;
+        y = x < false;
+        y = x >= false;
+        y = x <= false;
+        
+        // Applying a logical operator to an operand with type other than bool
+        y = !12;
+        y = x && y;
+        y = x || y;
+        
+        // Using a non-bool expression as the condition of an if
+        if (x) {}
+        
+        // Using a non-bool expression as the condition of a while
+        while (x) {}
+        
+        // Applying an equality operator to operands of two different types
+        if (x == y) {}
+        if (x != y) {}
+        
+        // Assigning a value of one type to a variable of another type
+        x = y;
+        y = x;
+        
+        // Comparing two functions for equality
+        if (voidFuncVoid == boolFuncBoolInt) {}
+        if (voidFuncVoid != boolFuncBoolInt) {}
+        
+        // Comparing two struct names for equality
+        if (TestStruct == TestStructTwo) {}
+        if (TestStruct != TestStructTwo) {}
+        
+        // Comparing two struct variables for equality
+        if (ts == ts2) {}
+        if (ts != ts2) {}
+        
+        // Assigning a function to a function
+        voidFuncInt = boolFuncBoolInt;
+        
+        // Assigning a struct name to a struct name
+        TestStruct = TestStructTwo;
+        
+        // Assigning a struct variable to a struct variable
+        ts = ts2;
+
+        if(voidFuncInt(10) == voidFuncVoid()) {}
+        if(voidFuncInt(10) != voidFuncVoid()) {}
+        
+        return true;
+    }
+    else {
+	    int x;
+        bool y;
+        struct TestStruct ts;
+        struct TestStructTwo ts2;
+        
+        // writing a function
+        cout << voidFuncVoid;
+        
+        // writing a struct name
+        cout << TestStruct;
+        
+        // writing a struct variable
+        cout << ts;
+        
+        // writing a void value
+        cout << voidFuncVoid();
+        
+        // reading a function
+        cin >> boolFuncVoid;
+        
+        // reading a struct name
+        cin >> TestStruct;
+        
+        // reading a struct variable
+        cin >> ts;
+        
+        // calling something other than a function
+        x();
+        
+        // calling a function with the wrong number of args
+        voidFuncInt(x, x);
+        boolFuncBoolInt(x);
+        
+        // calling a function with an argument of the wrong type
+        voidFuncInt(false);
+        boolFuncBoolInt(x, true);
+        
+        // Applying an arithmetic operator to an operand with type other than int
+        x = x * false;
+        x = x / false;
+        x = x + false;
+        x = x - false;
+        y++;
+        y--;
+        
+        // Applying a relational operator to an operand with type other than int
+        y = x > false;
+        y = x < false;
+        y = x >= false;
+        y = x <= false;
+        
+        // Applying a logical operator to an operand with type other than bool
+        y = !12;
+        y = x && y;
+        y = x || y;
+        
+        // Using a non-bool expression as the condition of an if
+        if (x) {}
+        
+        // Using a non-bool expression as the condition of a while
+        while (x) {}
+        
+        // Applying an equality operator to operands of two different types
+        if (x == y) {}
+        if (x != y) {}
+        
+        // Assigning a value of one type to a variable of another type
+        x = y;
+        y = x;
+        
+        // Comparing two functions for equality
+        if (voidFuncVoid == boolFuncBoolInt) {}
+        if (voidFuncVoid != boolFuncBoolInt) {}
+        
+        // Comparing two struct names for equality
+        if (TestStruct == TestStructTwo) {}
+        if (TestStruct != TestStructTwo) {}
+        
+        // Comparing two struct variables for equality
+        if (ts == ts2) {}
+        if (ts != ts2) {}
+        
+        // Assigning a function to a function
+        voidFuncInt = boolFuncBoolInt;
+        
+        // Assigning a struct name to a struct name
+        TestStruct = TestStructTwo;
+        
+        // Assigning a struct variable to a struct variable
+        ts = ts2;
+
+        if(voidFuncInt(10) == voidFuncVoid()) {}
+        if(voidFuncInt(10) != voidFuncVoid()) {}
+        
+        return true;
+    }
+}
+
+
+// returning from a non-void with a plain return value
+int a()
+{
+    return;
+}
+
+// returning a value from a void function
+void b()
+{
+    return 12;
+}

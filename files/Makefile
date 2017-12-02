@@ -56,10 +56,17 @@ EmptySymTableException.class: EmptySymTableException.java
 # test
 #
 test:
-	java $(FLAGS) P5 example.cimple test.out
+	java $(FLAGS) P5 test.cimple test.out
+	java $(FLAGS) P5 typeErrors.cimple errors.out
 
 ###
 # clean
 ###
 clean:
 	rm -f *~ *.class parser.java cimple.jlex.java sym.java
+
+###
+# clean output files
+###
+cleantest:
+	rm -f *.out

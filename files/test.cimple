@@ -1,7 +1,122 @@
-int main(){
+// returning values from functions
+void vFuncV()
+{
+    int a;
+    return;
+}
+
+void vFuncI(int a)
+{
+    return;
+}
+
+int iFuncV() 
+{ 
+    return 12; 
+}
+
+int iFuncB(bool b) 
+{ 
+    return 1; 
+}
+
+bool bFuncV() 
+{ 
+    return true; 
+}
+
+bool bFuncIB(int a, bool b) 
+{ 
+    return false; 
+}
+
+struct TestStructOne
+{
     int a;
     bool b;
-    a = 1;
-    b = true;
-    return a;
+};
+
+struct TestStructTwo
+{
+    bool a;
+    int b;
+};
+
+int main()
+{
+    int a;
+    int b;
+    int c;
+    bool x;
+    bool y;
+    bool z;
+    struct TestStructOne ts1;
+    struct TestStructTwo ts2;
+    
+    // writing proper variables
+    cout << a;
+    cout << a == a;
+    cout << a != b;
+    cout << "Hello";
+    
+    // writing struct members
+    cout << ts1.a;
+    cout << ts2.a;
+    
+    // writing function results
+    cout << iFuncV();
+    cout << iFuncB(false);
+    cout << bFuncV();
+    cout << bFuncIB(12, false);
+    
+    // reading
+    cin >> a;
+    
+    // calling functions
+    vFuncV();
+    vFuncI(100);
+    iFuncV();
+    iFuncB(z);
+    bFuncV();
+    bFuncIB(a, x);
+    
+    // operators on ints
+    if (a < b) {}
+    if (a > b) {}
+    if (a <= b) {}
+    if (a >= b) {}
+    a = b + c;
+    a = b - c;
+    a = b * c;
+    a = b / c;
+    a = -b;
+    
+    // operators on bools
+    if (x == y) {}
+    if (x != y) {}
+    if (x && y) {}
+    if (x || y) {}
+    if (!x) {}
+    
+    // assigning proper types
+    x = y;
+    a = b;
+    
+    while(true) {
+        a = b + c;
+        a = b - c;
+        a = b * c;
+        a = b / c;
+        a = -b;
+    }
+    
+    if(z) {
+        int a;
+        a++;
+    }
+    else {
+        int b;
+        b--;
+    }
+    return 0;
 }

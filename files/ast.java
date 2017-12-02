@@ -292,8 +292,9 @@ class StmtListNode extends ASTnode {
     public void typeCheck(Type t) {
     	for (StmtNode node : myStmts) {
             node.typeCheck();
-            if(node instanceof ReturnStmtNode) {
-            	node.typeCheck(t);
+            if(node instanceof ReturnStmtNode || node instanceof IfStmtNode 
+		|| node instanceof IfElseStmtNode || node instanceof WhileStmtNode) {
+            		node.typeCheck(t);
             }
         }
     }
@@ -1028,14 +1029,21 @@ class IfStmtNode extends StmtNode {
         }
     }
     
-    public void typeCheck() {
+    public void typeCheck(Type t) {
     	Type expType = myExp.typeCheck();
     	
     	if(!expType.isBoolType() && !expType.isErrorType()) {
     		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(),
     				"Non-bool expression used as an if condition");
     	}
+
+		myStmtList.typeCheck(t);
     }
+	
+	// wont be called
+	public void typeCheck() {
+		
+	}
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         p.print("if (");
@@ -1100,15 +1108,21 @@ class IfElseStmtNode extends StmtNode {
         }
     }
     
-    public void typeCheck() {
+    public void typeCheck(Type t) {
     	Type expType = myExp.typeCheck();
     	
     	if(!expType.isBoolType() && !expType.isErrorType()) {
     		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(),
     				"Non-bool expression used as an if condition");
     	}
+	myThenStmtList.typeCheck(t);
+	myElseStmtList.typeCheck(t);
     }
     
+	// wont be called
+	public void typeCheck() {
+		
+	}
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         p.print("if (");
@@ -1163,14 +1177,21 @@ class WhileStmtNode extends StmtNode {
         }
     }
     
-    public void typeCheck() {
+    public void typeCheck(Type t) {
     	Type expType = myExp.typeCheck();
     	
     	if(!expType.isBoolType() && !expType.isErrorType()) {
     		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(),
     				"Non-bool expression used as an a while condition");
     	}
+
+		myStmtList.typeCheck(t);
     }
+
+	// wont be called
+	public void typeCheck() {
+		
+	}
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         p.print("while (");
@@ -1232,6 +1253,7 @@ class ReturnStmtNode extends StmtNode {
         }
     }
 
+    // Type t is return type of func with this statement
     public void typeCheck(Type t) {
     	
     	Type expType = null;
@@ -1253,6 +1275,11 @@ class ReturnStmtNode extends StmtNode {
     		return;
     	}
     	
+	// Nothing to do, just return to avoid NullPointerException
+	if(expType == null && t.isVoidType()) {
+		return;
+	}
+
     	if(!expType.isErrorType() && !expType.toString().equals(t.toString()))  {
     		ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
     				"Bad return value");
@@ -1421,6 +1448,9 @@ class IdNode extends ExpNode {
     }
     
     public Type typeCheck() {
+	if(mySym == null) {
+		System.out.print("This shouldn't happen, like Red Shed on a Friday night...");
+	}
     	return mySym.getType();
     }
     
@@ -1654,15 +1684,6 @@ class AssignNode extends ExpNode {
     	if(myLhsType.isErrorType() || myExpType.isErrorType()) {
     		return new ErrorType();
     	}
-   
-    	// type mismatch check
-    	if(!myLhsType.toString().equals(myExpType.toString())) {
-    		if(!myExpType.isErrorType()) {
-    			ErrMsg.fatal(((IdNode)myLhs).lineNum(), ((IdNode)myLhs).charNum(), 
-                        "Type mismatch");
-    		}
-    		return new ErrorType();
-    	} 	
     	// Function assignment check
     	if(myLhsType.isFnType() && myExpType.isFnType()) {
     		ErrMsg.fatal(((IdNode)myLhs).lineNum(), ((IdNode)myLhs).charNum(), 
@@ -1683,6 +1704,15 @@ class AssignNode extends ExpNode {
                     "Struct name assignment");
     		return new ErrorType();
     	}
+
+	// type mismatch check
+    	if(!myLhsType.toString().equals(myExpType.toString())) {
+    		if(!myExpType.isErrorType()) {
+    			ErrMsg.fatal(((IdNode)myLhs).lineNum(), ((IdNode)myLhs).charNum(), 
+                        "Type mismatch");
+    		}
+    		return new ErrorType();
+    	} 	
     	
     	// no errors, return LHS type (RHS is same at this point)
     	return myLhsType;
@@ -2137,7 +2167,7 @@ class EqualsNode extends BinaryExpNode {
     	
     	// come back to this to see how getClass works
     	// also, it is both functions return void or just one?
-    	if(myExp1.getClass().equals("CallExpNode") && myExp2.getClass().equals("CallExpNode")) {
+    	if(myExp1 instanceof CallExpNode && myExp2 instanceof CallExpNode) {
     		IdNode funcId1 = ((CallExpNode)myExp1).getFuncId();
     		IdNode funcId2 = ((CallExpNode)myExp2).getFuncId();
     		FnSym f1 = (FnSym)funcId1.sym();
@@ -2147,11 +2177,6 @@ class EqualsNode extends BinaryExpNode {
     					"Equality operator applied to void functions");
     		}
     		return new ErrorType();
-    	}
-    	
-    	if(!expType1.toString().equals(expType2.toString())) {
-    		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-    					"Type mismatch");
     	}
     	
     	if(expType1.isFnType() && expType2.isFnType()) {
@@ -2170,6 +2195,11 @@ class EqualsNode extends BinaryExpNode {
     		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
 					"Equality operator applied to struct names");
     		return new ErrorType();
+    	}
+
+    	if(!expType1.toString().equals(expType2.toString())) {
+    		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+    					"Type mismatch");
     	}
     	
     	return new BoolType();
@@ -2206,11 +2236,6 @@ class NotEqualsNode extends BinaryExpNode {
     		}
     		return new ErrorType();
     	}
-
-    	if(!expType1.toString().equals(expType2.toString())) {
-    		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-    					"Type mismatch");
-    	}
     	
     	if(expType1.isFnType() && expType2.isFnType()) {
     		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
@@ -2228,6 +2253,11 @@ class NotEqualsNode extends BinaryExpNode {
     		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
 					"Equality operator applied to struct names");
     		return new ErrorType();
+    	}
+
+	if(!expType1.toString().equals(expType2.toString())) {
+    		ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+    					"Type mismatch");
     	}
     	
     	return new BoolType();
